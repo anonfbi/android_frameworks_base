@@ -2073,9 +2073,6 @@ public class WifiStateMachine extends StateMachine {
             new Thread(new Runnable() {
                 public void run() {
                     mWakeLock.acquire();
-		    if (!isScreenOn()) {
-			acquireSodLock();
-		    }
                     //enabling state
                     switch(message.arg1) {
                         case WIFI_STATE_ENABLING:
@@ -2087,6 +2084,7 @@ public class WifiStateMachine extends StateMachine {
                     }
 
                     if(mWifiNative.loadDriver()) {
+			if (!isScreenOn()) acquireSodLock();
                         if (DBG) log("Driver load successful");
                         sendMessage(CMD_LOAD_DRIVER_SUCCESS);
                     } else {
